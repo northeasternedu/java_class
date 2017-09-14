@@ -1,0 +1,78 @@
+Problem 2: Organize a career fair(as an organizer)
+
+	Identify Objects and Behaviors:
+
+	
+	Things : 
+			Organizer: 
+				Data: OrganizationName Phone, Address, ElectronicWebsite 
+				Behavior: search, contact, advertise, market, send, invite
+			Exhibitor: 
+				Data: Name, Phone, JobAvailable, ElectronicWebsite, 
+				Behavior: participate, offerJob, acceptResume,
+			JobSeeker: 
+				Data: Name, Phone, Address, DesirableJob, Resume
+				Data: speak, present, offerResume
+			CareerFair:
+				Data: Name, Address, Type, Exhibitor[] exhibitors, JobSeeker[] jobSeeker,
+
+			CareerFairSiteProvider:
+				Data: Name, Address, Phone, SiteAddress, SiteCapacity
+				Behaviors: offerSite 
+			CreditCard: 
+		 	Data: Name, Number, Company, ExpirationDate, SecurityCode
+ 
+			Internet: 
+				Data: Google, Yahoo, website1, website2: Collection of Websites
+				Behaviors : searchForElectronicWebsites
+
+			ElectronicWebsite: 
+				Data : URL
+				Behaviors : search, sort, display, compare 
+			
+
+			Supply:
+				Data: Table, Chair, Paper, Quantity
+			InvitationLetter:
+				Data: ReceiverName, Time, Address, 
+			Advertisement: 
+				Data: Poster, Flyer, TVCommercial, DateAndTime, Location, Exhibitor[] exhibitor, CareerFairType
+
+
+	Sequence of Flow - Invoke Objects with Behaviors
+
+	Organizer organizer, 
+	Exhibitor exhibitor, 
+	JobSeeker jobSeeker,
+	SiteProvider siteProvider,
+	CareerFair careerFair,
+	CareerFairSite careerFairSite,
+	Internet internet, 
+	FairSupply fairSupply, 
+	InvitationLetter invitationLetter, 
+	Advertisement advertisement
+	CreditCard creditCard 
+
+	If internet.isAvailable 
+
+		do 
+			organizer.searchForDesirableCareerFairSite -> siteCapacity, distance, dateAndTime, priceRange -> Collection of CareerSite : careerFairSite 
+			desirableSite = careerFairSite 
+			organizer.rentSite -> desirableSite, organizerContactInformation, creditCard -> leaseContract
+		while(desirableSite.isAvailable) 
+
+		Loop 
+				organizer.sendInvitationLetterToPotentialExhibitor -> invitationLetter, organizerContactInformation
+
+				If exhibitor.isWillingToAttend
+					exhibitor.acceptInvitation -> invitationLetter, confirmation -> reply 
+				Else exhibitor.sendDeclineNotification -> declineReply
+		End 
+
+		organizer.parepareForCareerFair -> fairSupply, advertisement -> careerFair
+		jobSeeker.attendCareerFair -> jobSeekerContactInformation, resume
+
+	Else 
+		organizer.callSiteProviderToRentSite -> organizerContactInformation, careerFiar : careerFair
+		organizer.
+	End 

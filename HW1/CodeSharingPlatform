@@ -1,0 +1,44 @@
+Problem 4: Design a code sharing a platform
+
+	Identify Objects and Behaviors:
+	
+	Things: 
+			
+			CodeSharingPlatform: 
+				Data: User, CodeSharer, SharedCode, CommentField
+				Behaviors: store, save, display, add, delete 
+
+			User: 
+				Data: userName, Password 
+				Behaviors: logIn, read, search, write
+
+			CodeWriter: 
+				Data: userName, Password, Code
+
+			SharedCode:
+				Data: Code, CodeSharer, UploadedTime
+
+
+			
+	Sequence of Flow - Invoke Objects with Behaviors
+
+	CodeSharingPlatform myPlatform, 
+	User user, 
+	CodeWriter codeWriter, 
+	SharedCode code, 
+
+	If CodeSharingPlatform.isAvailable 
+			codeWriter.logInToCodeSharingPlatform -> userName, password 
+			codeWriter.writeCode -> code 
+			codeWriter.uploadCode -> code 
+
+			user.logInToCodeSharingPlatform -> username, password 
+			user.searchForDesirableCode -> keyWord, writerName -> Collection of Code Files 
+			user.selectDesirableCode -> codeFile 
+			myCode = codeFile 
+			user.readCode -> myCode 
+			user.writeComment -> comment :myComment
+
+	Else 
+			codeWriter.cantUploadCode 
+			user.cantReadSharedCode 

@@ -1,0 +1,144 @@
++Problem 1: Hiking 
+
+	Identify Objects and Behaviors: 
+	
+
+	Things: 
+		Customer : 
+			Data: Name, Address, Phone, DriverLicense
+			Behavior: search, browse, rent, drive, walk, fill, eat, buy, book, call, speak, cancel 
+		VehicleRenter: 
+			Data: Name, Address, Phone, Vehicle
+			Behavior: lease
+		Vehicle: 
+			Data: Name, Price, Color, Capacity, Brand, Style 
+			Behavior: run
+		Places:
+			Destination: 
+				Data: Name, Address, Distance 
+			GasStation: 
+				Data: Name, Address, 
+				Behavior: provideGas
+			Restaurant:
+				Data: Name, Address, Phone, Food, Style
+				Behavior: offerFood, charge
+			Park: 
+				Data: Name, Address, Phone
+				Behavior: 
+			Hotel: 
+				Data: Name, Address, Phone, Price
+				Behavior: offerRoom
+		 Internet: 
+		 	Data: HotWire, Expedia, Website1, Website2: Group of Websites (Collection of Websites)
+		 
+		 ElectronicWebsite: 
+		 	Data: URL, Hotel[] hotels, BankAccount
+		 	Behavior: search, sort, display, compare, placeTheOrder
+		 	
+		 Ticket: 
+		 	Data: Price
+		 
+		 Gas: 
+		 	Data: Price, Gallon
+		 
+		 Lunch: 
+		 	Data: food, price
+		 
+		 CreditCard: 
+		 	Data: Name, Number, Company, ExpirationDate, SecurityCode
+		 
+		 CreditCardCompany: 
+		 	Behavior: authorizeTransaction 
+	
+	Sequence of invoking behaviors on Objects: 
+	
+	RentReachnowToMountainRainier: 
+		Customer meAndFriends
+		Internet internet, 
+		ElectronicWebsite hotWire, 
+		VehicleRenter reachNow,
+		Vehicle vehicle, 
+		Destination destination, 
+		GasStation gasStation, 
+		Restaurant restaurant, 
+		Lunch lunch, 
+		Park park, 
+		Ticket ticket, 
+		Hotel hotel, 
+		CreditCard card, 
+		CreditCardCompany master, 
+		OrderConfirmation response
+		
+		// rent on ReechNow 
+		If Internet.isAvailable
+				meAndFriends.searchInternet -> internet, question : Collection of ElectronicWebsites
+				//meAndFriends.findDesirableWebsiteInFirstPage -> Collection of Websites: website
+				pageNumber = 1;
+				Loop
+						If meAndFriends.findNoPages
+								break
+						End
+						meAndFriends.findDesirableWebsiteInAPage -> internet, question, pageNumber : website 
+						reachNow = website
+						If reachNow is not empty
+								break
+						Else
+								pageNumber = pageNumber + 1
+						End 
+				End 
+				reachNow = website
+				If reachNow is not empty or reachNow != null
+						reachNow.searchForVehicle -> priceRange, brand, style, color, capacity : Collection of Vehicle : vehicle
+						myVehicle = vehicle 
+						meAndFriends.rentVehicle -> myVehicle, creditCard, address, driverLicense, reachNow : OrderConfirmation
+						response = orderComfirmation 
+				Else 
+						meAndFriends.cantRentVehicle
+				End 
+
+
+		// Buy a ticket for a park
+
+				meAndFriends.logInParkWebsite -> websiteAddress 
+				meAndFriends.buyTicketForPark -> dateAndTime, ticketQuantity, creditCard : OrderConfirmation
+				receipt = orderConfirmation 
+				creditCardCompany.authorizeTransaction
+
+				If creditCard.hasNotEnoughBalance
+							creditCardCompany.rejectTransaction 
+
+		
+		//Book a hotel 
+		
+				do 
+					meAndFriends.searchForDesirableHotel -> name, style, location, capacity, priceRange -> Collection of Hotel : hotel
+				while(meAndFriends.keepSearching)
+
+					meAndFriends.searchForDesirableRoom -> capacity, priceRange, Floor -> Collection of Rooms : room
+					meAndFriends.placeOrder -> room, roomQuantity, creditCard -> OrderConfirmation : receipt
+					creditCardCompany.authorizeTransaction
+
+					If creditCard.hasNotEnoughBalance
+							creditCardCompany.rejectTransaction 
+					End
+
+		Else
+				meAndFriends.browseInternetAfterAWhileBack 
+		
+		// Fill the gas
+		meAndFriends.searchForGasStation -> name, distance -> Collection of GasStation : gasStation
+		shell = gasStation
+		meAndFriends.fillGas -> gallon, name : gas
+		premium91 = gas,
+		meAndFriends.buyGas -> creditCard : OrderConfirmation
+		receipt = orderConfirmation 
+		
+		// Eat at a restaurant 
+		meAndFriends.driveToRestaurant -> name, location : restaurant
+		redRobin = restaurant 
+		meAndFriends.orderLunch -> foodName, quantity: Collection of Lunch : orderedLunchList
+		redRobin.makeLunch ->  orderedLunchList
+		redRobin.serveLunchToTable -> food
+		meAndFriends.eatLunch
+		meAndFriends.payLunch -> orderedlunchList, creditCard :  receipt 
+		meAndFriends.leaveRestaurant

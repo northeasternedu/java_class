@@ -1,0 +1,73 @@
+Problem 3: Order Pizza from pizzaHut 
+
+	Identify Objects and Behaviors:
+	
+	Things : 
+			Customer: 
+				Data: Name, Address, Phone, CreditCard 
+				Behaviors: logIn, select, add, cancel, payOnline, placeOrder
+
+			Pizza: 
+				Data: Size, Sauce, Dough, Topping, 
+
+			PizzaProvider:
+				Data: BankAccount, ElectronicWebsite, Pizza 
+				Behaviors: make
+
+			CreditCard: 
+				Data: Number, Name, ExpirationDate
+
+			CredtiCardCompany:
+				Behavior: authorizeTransaction 
+			
+			
+			
+	Sequence of Flow - Invoke Objects with Behaviors
+		
+		Customer customer, 
+		Pizza myPizza, 
+		PizzaProvider pizzaHut,
+		CreditCard myCreditCard, 
+		OrderConfirmation response, 
+
+		If PizzaHutWeb.getAppStatus = online 
+			If customer.loginToPizzaHutWebApp = success
+
+			do 
+					customer.selectSize
+					customer.selectSauce
+					customer.selectDough
+					customer.selectToppings
+					customer.addPizzaToOrder -> pizzaOrder, myPizza 
+					customer.selectDeliverMethod
+
+			while(customer.wantsToOrderMorePizza)
+
+			
+			do	
+				customer.placeOrder -> myCreditCard, pizzaOrder -> OrderConfirmation : orderConfirmation
+
+				if creditCardCompany.authrozieTransaction -> customer.myCreditCard : response
+					if response = succeed 
+						pizzaHut.makePizza -> pizzaOrder
+
+						If customer.wantsToPickUpAtStore 
+							pizzaHut.offerTimeToPickUp -> time 
+							customer.pickUpAtPizzaHut -> myPizza 
+						Else
+							pizzaHut.deliverPizza -> myPizza
+						End 
+
+					else if response = declined
+						show creditcard declined info
+						customer.myCreditCard.update
+
+					end
+				end 
+			while(myCreditCard updated)
+
+		Else 
+			
+			cusomer.cantOrderPizzaFromPizzaHutOnline 
+
+		End 
