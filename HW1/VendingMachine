@@ -1,0 +1,77 @@
+Problem 5: Design a soft-drink/snacks vending machine. 
+
+	Identify Objects and Behaviors:
+	
+	Things: 
+			Purchaser: 
+				Data: Coin, Bill, CreditCard
+				Behavior: select, insert, swipeCreditCard, takeItem
+			VendingMachine: 
+				Data: Item
+				Behavior: displayItem, dispenseItem, calculate, charge, check, rejectToDisperseItem
+			DisplayChamber: 
+				Data: Number, Price
+			Item: 
+				Data: Name, Price
+			Cash: 
+				Data: denomination, quantity, size 
+				
+			Credit Card: 
+				Data: Number, Name, Company, ExpirationDate, SecurityCode, Banlance
+
+			CreditCardCompany: 
+				Behavior: authorizeTransaction, rejectTransaction
+	
+	Sequence of Flow - Invoke Objects with Behaviors
+	
+	Purchaser purchaser, 
+	VendingMachine vendingMaching, 
+	DisplayChamber displayChamber, 
+	Item item, 
+	Cash cash, 	
+	CreditCard creditCard, 
+	CreditCardCompany creditCardCompany
+	
+	
+	If VendingMachine.isWorking && Item.isAvailable
+
+			Loop 
+				vendingMachine.displayItem -> name, brand, price -> Collection of Items: item
+				purchaser.selectItem -> displayChamber.number -> Item: item
+				coke = item 
+				vendingMachine.calculateCost -> quantity * unitPrice -> TotalCost : totalCost
+
+				If Purchaser.hasCash
+
+					purchaser.insertCash
+					vendingMachine.checkCash -> denomination, size, quantity -> CashValue : cashTotalValue
+
+
+					CASE 1: cashTotalValue > =totalCost
+						vendingMachine.returnChange -> denomiation, quantity -> coinChange
+						vendingMachine.dispenseItem
+						break; 
+
+					CASE 2: cashTotalValue < totalCost
+						vendingMachine.rejectToDispenseItem
+						break;
+
+				End 
+
+				Else if Purchaser.hasCreditCard 
+					purchaser.swipeCreditCard -> creditCard
+					vendingMachine.checkCreditCard -> name, number, expirationDate, securityCode
+
+						If creditCard.hasBanlance 
+							creditCardCompany.authorizeTransaction 
+						Else 
+							creditCardCompany.rejectTransaction 
+							purchaser.cantPurchaseItems 
+						End
+				End 
+				
+
+	Else If VendingMachine.isNotWorking || Item.isUnavailable
+
+		purchaser.cantPurchaseItems
+	End 
